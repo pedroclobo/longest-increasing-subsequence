@@ -15,8 +15,36 @@ void parse_vector(vector<int> *v) {
 }
 
 void p1() {
-	vector<int> v1;
-	parse_vector(&v1);
+	vector<int> v;
+	parse_vector(&v);
+
+	size_t size = v.size();
+
+	vector<int> len(size, 1);
+	vector<int> occ(size, 1);
+
+	int max = -1;
+	int occ_max = 1;
+	for (size_t i = 0; i < size; i++) {
+		for (size_t j = 0; j < i; j++) {
+			if (v[j] < v[i]) {
+				if (len[j] + 1 > len[i]) {
+					len[i] = len[j] + 1;
+					occ[i] = occ[j];
+				} else if (len[j] + 1 == len[i]) {
+					occ[i] += occ[j];
+				}
+			}
+		}
+		if (len[i] > max) {
+			max = len[i];
+			occ_max = occ[i];
+		} else if (len[i] == max) {
+			occ_max += occ[i];
+		}
+	}
+
+	cout << max << " " << occ_max << endl;
 }
 
 void p2() {
