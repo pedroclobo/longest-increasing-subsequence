@@ -15,4 +15,4 @@ all:: clean
 	@if [ `wc -l < $@` -eq 0 ]; then echo $(OK); else echo $(KO); fi;
 
 clean::
-	rm -f *.diff
+	@rm -f *.diff

@@ -1,16 +1,17 @@
 CC = g++
-CFLAGS = -std=c++11 -O3 -Wall -lm
-SRC = ./src
-EXE = proj
+CFLAGS = -std=c++11 -O3 -Wall -lm -g
+MFLAGS += --no-print-directory
 
-proj: $(SRC)/proj.cpp
-	$(CC) $(CFLAGS) $(SRC)/proj.cpp -o $(SRC)/$(EXE)
+all:: proj
 
-run::
-	$(SRC)/$(EXE)
+proj: src/proj.cpp
+	$(CC) $(CFLAGS) src/proj.cpp -o src/proj
+
+run:: proj
+	./src/proj
 
 clean::
-	rm $(SRC)/$(EXE)
+	rm src/proj
 
-test::
-	$(MAKE) $(MFLAGS) -C tests
+tests:: proj
+	@$(MAKE) $(MFLAGS) -C tests
