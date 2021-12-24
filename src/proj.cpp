@@ -14,21 +14,17 @@ void parse_vector(vector<int> *v) {
 	}
 }
 
-void p1() {
-	vector<int> v;
-	parse_vector(&v);
-
-	int len[v.size()];
-	int occ[v.size()];
-	for (size_t i = 0; i < v.size(); i++) {
-		len[i] = occ[i] = 1;
-	}
-
+int longest_increasing_subsequence_lenght(vector<int> *v, int *num_occ) {
+	vector<int> len;
+	vector<int> occ;
 	int len_max = 0;
-	int occ_max = 0;
-	for (size_t i = 0; i < v.size(); i++) {
+
+	for (size_t i = 0; i < v->size(); i++) {
+		len.push_back(1);
+		occ.push_back(1);
+
 		for (size_t j = 0; j < i; j++) {
-			if (v[j] < v[i]) {
+			if (v->at(j) < v->at(i)) {
 				if (len[j] + 1 > len[i]) {
 					len[i] = len[j] + 1;
 					occ[i] = occ[j];
@@ -37,15 +33,48 @@ void p1() {
 				}
 			}
 		}
+
 		if (len[i] > len_max) {
 			len_max = len[i];
-			occ_max = occ[i];
+			*num_occ = occ[i];
 		} else if (len[i] == len_max) {
-			occ_max += occ[i];
+			*num_occ += occ[i];
 		}
 	}
 
-	cout << len_max << " " << occ_max << endl;
+	return len_max;
+}
+
+int longest_common_increasing_subsequence_lenght(vector<int> *v1, vector<int> *v2) {
+   	int aux[v2->size()];
+	for (size_t i = 0; i < v2->size(); i++) {
+		aux[i] = 0;
+	}
+
+	int len_max = 0;
+	for (size_t i = 0; i < v1->size(); i++) {
+		int lcis = 0;
+		for (size_t j = 0; j < v2->size(); j++) {
+			if (v1->at(i) == v2->at(j)) {
+				aux[j] = max(lcis + 1, aux[j]);
+				len_max = max(aux[j], len_max);
+			} else if (v1->at(i) > v2->at(j)) {
+				lcis = max(lcis, aux[j]);
+			}
+		}
+	}
+
+	return len_max;
+}
+
+void p1() {
+	vector<int> v;
+	parse_vector(&v);
+
+	int occ;
+	int len = longest_increasing_subsequence_lenght(&v, &occ);
+
+	cout << len << " " << occ << endl;
 }
 
 void p2() {
@@ -53,37 +82,14 @@ void p2() {
 	parse_vector(&v1);
 	parse_vector(&v2);
 
-	int len[v1.size()+1][v2.size()+1];
-
-	int len_max = 0;
-	int last_common = -1;
-	bool is_last_common = false;
-
-	for (size_t i = 0; i <= v1.size(); i++) {
-		for (size_t j = 0; j <= v2.size(); j++) {
-			if (i == 0 || j == 0) {
-				len[i][j] = 0;
-			} else if (v1[i-1] == v2[j-1]) {
-				if (is_last_common == true && v1[i-1] > last_common) {
-					len[i][j] = len[i-1][j-1] + 1;
-				} else if (is_last_common == false) {
-					is_last_common = true;
-					last_common = v1[i-1];
-					len[i][j] = len[i-1][j-1] + 1;
-				} else {
-					last_common = v1[i-1];
-					len[i][j] = len[i-1][j-1];
-				}
-			} else {
-				len[i][j] = max(len[i-1][j], len[i][j-1]);
-			}
-			if (len[i][j] > len_max) {
-				len_max = len[i][j];
-			}
-		}
+	int len;
+	if (v1.size() > v2.size()) {
+		len = longest_common_increasing_subsequence_lenght(&v2, &v1);
+	} else {
+		len = longest_common_increasing_subsequence_lenght(&v1, &v2);
 	}
 
-	cout << len_max << endl;
+	cout << len << endl;
 }
 
 int main() {
