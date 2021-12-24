@@ -14,17 +14,27 @@ void parse_vector(vector<int> *v) {
 	}
 }
 
+int find_min(vector<int> *v) {
+	int minimum = v->at(0);
+
+	for (int number: *v) {
+		minimum = min(number, minimum);
+	}
+
+	return minimum;
+}
+
 int longest_increasing_subsequence_lenght(vector<int> *v, int *num_occ) {
 	vector<int> len;
 	vector<int> occ;
-	int len_max = 0;
 
+	int len_max = 0;
 	for (size_t i = 0; i < v->size(); i++) {
 		len.push_back(1);
 		occ.push_back(1);
 
 		for (size_t j = 0; j < i; j++) {
-			if (v->at(j) < v->at(i)) {
+			if (v->at(i) > v->at(j)) {
 				if (len[j] + 1 > len[i]) {
 					len[i] = len[j] + 1;
 					occ[i] = occ[j];
@@ -46,20 +56,25 @@ int longest_increasing_subsequence_lenght(vector<int> *v, int *num_occ) {
 }
 
 int longest_common_increasing_subsequence_lenght(vector<int> *v1, vector<int> *v2) {
-   	int aux[v2->size()];
+   	int lcis[v2->size()];
+
+	int min2 = find_min(v2);
+
 	for (size_t i = 0; i < v2->size(); i++) {
-		aux[i] = 0;
+		lcis[i] = 0;
 	}
 
 	int len_max = 0;
 	for (size_t i = 0; i < v1->size(); i++) {
-		int lcis = 0;
+		int current_lcis = 0;
 		for (size_t j = 0; j < v2->size(); j++) {
 			if (v1->at(i) == v2->at(j)) {
-				aux[j] = max(lcis + 1, aux[j]);
-				len_max = max(aux[j], len_max);
+				lcis[j] = max(lcis[j], current_lcis + 1);
+				len_max = max(len_max, lcis[j]);
+			} else if (v1->at(i) < min2) {
+				break;
 			} else if (v1->at(i) > v2->at(j)) {
-				lcis = max(lcis, aux[j]);
+				current_lcis = max(current_lcis, lcis[j]);
 			}
 		}
 	}
