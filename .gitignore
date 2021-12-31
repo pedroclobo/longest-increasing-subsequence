@@ -1,3 +1,8 @@
+*.aux
 *.diff
-a.out
+*.log
+*.txt
+arr.in
+benchmark
 proj
+random_k
