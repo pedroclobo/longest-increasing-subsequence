@@ -21,36 +21,39 @@
 \section{Problema 1}
 \subsection{Descrição do Problema e da Solução}
 
-O problema apresentado tem por objeto determinar o número de subsequências
+O problema apresentado tem como objeto determinar o número de subsequências
 estritamente crescentes de tamanho máximo de uma sequência de inteiros, bem
-como indicar qual é esse tamanho máximo.
+como indicar qual esse tamanho máximo.
 
-O problema pode ser resolvido recursivamente e apresenta sub-estrutura ótima.
-O tamanho da maior subsequência, LIS, e o número de occorrências desta podem ser
-definidos como
+O problema pode ser resolvido recursivamente. $L$ corresponde à função que,
+para um dado índice, devolve o tamanho da maior subsequência estritamente
+crescente até à posição $i$. $O$, de forma semelhante, representa as ocorrências
+de subsequências de tamanho máximo até à posição $i$.
 
 \begin{center}
-	${LIS[i] = \{1 + max(LIS[j] \mid 1 \leq j < i \land x_j \leq x_i)}\}$\\
+	${L[i] = \{1 + max(L[j] \mid 1 \leq j < i \land x_j \leq x_i)}\}$\\
 	\[
-    OCC[i] = \left\{\begin{array}{lr}
-		OCC[j], & \text{se } LIS[j] + 1 > LIS[i]\\
-		OCC[i] + OCC[j], & \text{se } LIS[j] + 1 = LIS[i]\\
+    O[i] = \left\{\begin{array}{lr}
+		O[j], & \text{se } L[j] + 1 > L[i]\\
+		O[i] + O[j], & \text{se } L[j] + 1 = L[i]\\
         \end{array} \mid 1 \leq j < i \land x_j \leq x_i)\right\}
 	\]\\[\baselineskip]
 
 \end{center}
 
-São mantidos dois vetores, um para os tamanhos e outro para as sequências.
-Estes são preenchidos sequencialmente. O maior tamanho será o máximo do vetor
-LIS e o número de occorrências é a soma das ocorrências onde o tamanho
-é máximo.
+São utilizados dois vetores, para manter a informação descrita acima. Estes são
+preenchidos sequencialmente. O maior tamanho será o máximo do vetor $L$ e o número
+de occorrências é dado pela soma dos valores de $O$ onde $L$ é máximo.
 
 
 \subsection{Análise Teórica}
 
 \begin{itemize}
 	\item Leitura dos dados de entrada. $\mathcal{O}(N)$
+	\item Aplicação do algoritmo.. $\mathcal{O}(N^2)$
+	\item Apresentação do resultado. $\mathcal{O}(1)$
 \end{itemize}
+Complexidade global: $\mathcal{O}(N^2)$
 
 \subsection{Avaliação Experimental dos Resultados}
 
@@ -79,16 +82,27 @@ O problema apresentado tem por objeto determinar o tamanho do maior subsequênci
 estritamente crescentes comum a duas sequências de inteiros.
 
 O problema pode ser resolvido recursivamente e apresenta sub-estrutura ótima.
-O tamanho da maior subsequência, LIS, pode ser definido como
+O tamanho da maior subsequência pode ser definido como
 
 \begin{center}
+	\[
+	L[i][j] = \left\{\begin{array}{lr}
+		0, & \text{se } i = 0\\
+		max(L[i-1][k] + 1 \mid 1 \leq k \leq j \land x_1[i] > x_2[j]), & \text{se } x_1[i] = x_2[j] \text{ e } i > 0\\
+        \end{array}\right\}
+	\]\\[\baselineskip]
 \end{center}
+
+O problema pode ser resolvido recorrendo apenas a uma matrix $1 \times j$, uma
+vez que o valor necessário da linha anterior pode ser representado por um
+inteiro. O resultado ao problema corresponde ao maior valor em $L$.
 
 
 \subsection{Análise Teórica}
 
 \begin{itemize}
-	\item Leitura dos dados de entrada. $\mathcal{O}(N)$
+	\item Leitura das dados de entrada. $\mathcal{O}(N)$
+	\item Comparação do tamanho das sequências. $\mathcal{O}(1)$
 	\item Procura do mínimo da sequência. $\mathcal{O}(N)$
 	\item Inicialização do vetor auxiliar. $\mathcal{O}(N)$
 	\item Aplicação do algoritmo. $\mathcal{O}(N^2)$

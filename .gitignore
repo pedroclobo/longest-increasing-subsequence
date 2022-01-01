@@ -2,7 +2,7 @@
 *.diff
 *.log
 *.txt
-arr.in
+sequence
 benchmark
 proj
 random_k

@@ -14,26 +14,16 @@ void parse_vector(vector<int> *v) {
 	}
 }
 
-int find_min(const vector<int> *v) {
-	int minimum = v->at(0);
-
-	for (int number: *v) {
-		minimum = min(number, minimum);
-	}
-
-	return minimum;
-}
-
 int longest_increasing_subsequence_lenght(const vector<int> *v, int *num_occ) {
-	vector<int> len;
-	vector<int> occ;
+	int len[v->size()];
+	int occ[v->size()];
 
 	int len_max = 0;
 	int minimum = v->at(0);
 
 	for (size_t i = 0; i < v->size(); i++) {
-		len.push_back(1);
-		occ.push_back(1);
+		len[i] = 1;
+		occ[i] = 1;
 
 		minimum = min(v->at(i), minimum);
 
@@ -70,13 +60,17 @@ int longest_increasing_subsequence_lenght(const vector<int> *v, int *num_occ) {
 int longest_common_increasing_subsequence_lenght(const vector<int> *v1, const vector<int> *v2) {
    	int lcis[v2->size()];
 
-	int min2 = find_min(v2);
+	int len_max = 0;
+
+	int min2 = v2->at(0);
+	for (size_t i = 0; i < v2->size(); i++) {
+		min2 = min(min2, v2->at(i));
+	}
 
 	for (size_t i = 0; i < v2->size(); i++) {
 		lcis[i] = 0;
 	}
 
-	int len_max = 0;
 	for (size_t i = 0; i < v1->size(); i++) {
 		int current_lcis = 0;
 		for (size_t j = 0; j < v2->size(); j++) {

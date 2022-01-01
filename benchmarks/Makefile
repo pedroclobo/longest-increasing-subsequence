@@ -1,18 +1,16 @@
 CC = g++
-CFLAGS = -std=c++11 -O3 -Wall -lm -g
+CFLAGS = -std=c++11 -O3 -Wall -lm
 MFLAGS += --no-print-directory
 EXE=../src/proj
 
 all:: run
 
-benchmark: benchmark.c
-	$(CC) $(CFLAGS) benchmark.c -o benchmark
-
 random_k: random_k.cpp
 	$(CC) $(CFLAGS) random_k.cpp -o random_k
 
-run:: benchmark random_k
-	./benchmark
+run:: random_k
+	bash benchmark.sh 1
+	bash benchmark.sh 2
 
 clean::
-	rm benchmark random_k 1.txt 2.txt arr.in
+	rm random_k 1.txt 2.txt sequence
