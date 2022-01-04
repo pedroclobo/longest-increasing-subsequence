@@ -1,5 +1,6 @@
 \documentclass[12pt, letterpaper]{article}
 \usepackage[margin=3cm]{geometry}
+\usepackage{multicol}
 \usepackage{amsmath}
 \usepackage{tikz}
 \usepackage{pgfplots}
@@ -18,17 +19,16 @@
 \end{flushleft}
 
 
-\section{Problema 1}
-\subsection{Descrição do Problema e da Solução}
+\section{Descrição do Problema e da Solução}
 
-O problema apresentado tem como objeto determinar o número de subsequências
-estritamente crescentes de tamanho máximo de uma sequência de inteiros, bem
-como indicar qual esse tamanho máximo.
+O 1º problema apresentado tem como objetivo determinar o número de subsequências
+estritamente crescentes de tamanho máximo de uma sequência de inteiros e indicar
+qual esse tamanho máximo.
 
-O problema pode ser resolvido recursivamente. $L$ corresponde à função que,
+Este problema pode ser resolvido recursivamente. $L$ corresponde à função que,
 para um dado índice, devolve o tamanho da maior subsequência estritamente
-crescente até à posição $i$. $O$, de forma semelhante, representa as ocorrências
-de subsequências de tamanho máximo até à posição $i$.
+crescente até à posição $i$. $O$, de forma semelhante, representa o número de
+ocorrências de subsequências de tamanho máximo até à posição $i$.
 
 \begin{center}
 	${L[i] = \{1 + max(L[j] \mid 1 \leq j < i \land x_j \leq x_i)}\}$\\
@@ -42,26 +42,65 @@ de subsequências de tamanho máximo até à posição $i$.
 \end{center}
 
 São utilizados dois vetores, para manter a informação descrita acima. Estes são
-preenchidos sequencialmente. O maior tamanho será o máximo do vetor $L$ e o número
-de occorrências é dado pela soma dos valores de $O$ onde $L$ é máximo.
+preenchidos sequencialmente. O maior tamanho será o máximo do vetor $L$ e o
+número de ocorrências é dado pela soma dos valores de $O$ onde $L$ é máximo.\\[\baselineskip]
 
 
-\subsection{Análise Teórica}
+O 2º problema apresentado tem como objeto determinar o tamanho do maior subsequência
+estritamente crescentes comum a duas sequências de inteiros.
 
+Este problema pode ser resolvido recursivamente e apresenta subestrutura ótima.
+O tamanho da maior subsequência pode ser definido como
+
+\begin{center}
+	\[
+	L[i][j] = \left\{\begin{array}{lr}
+		0, & \text{se } i = 0 \text{ ou } j = 0\\
+		L[i-1][j], & \text{se } i,j > 0 \text{ e } x_1[i] \neq x_2[j]\\
+		1 +	max(L[i-1][k] \mid 1 \leq k < j \land x_1[i] > x_2[j]), & \text{se } i,j > 0 \text{ e } x_1[i] = x_2[j]\\
+        \end{array}\right\}
+	\]\\[\baselineskip]
+\end{center}
+
+A matriz é preenchida linha a linha, coluna a coluna, sendo o resultado dado
+pelo valor máximo da última linha preenchida.
+No entanto, este problema pode ser resolvido recorrendo apenas a uma matriz $2
+\times j$, uma vez que apenas são necessários valores da linha atual e da linha
+anterior. Assim, o resultado do problema corresponde ao valor máximo da última
+linha preenchida da matriz.
+
+
+\pagebreak
+\section{Análise Teórica}
+
+\subsection{Problema 1}
 \begin{itemize}
 	\item Leitura dos dados de entrada. $\mathcal{O}(N)$
-	\item Aplicação do algoritmo.. $\mathcal{O}(N^2)$
+	\item Aplicação do algoritmo. $\mathcal{O}(N^2)$
 	\item Apresentação do resultado. $\mathcal{O}(1)$
 \end{itemize}
 Complexidade global: $\mathcal{O}(N^2)$
 
-\subsection{Avaliação Experimental dos Resultados}
+\subsection{Problema 2}
+\begin{itemize}
+	\item Leitura do primeira sequência. $\mathcal{O}(N)$
+	\item Leitura do segunda sequência. $\mathcal{O}(M)$
+	\item Comparação do tamanho das sequências. $\mathcal{O}(1)$
+	\item Inicialização do vetor auxiliar. $\mathcal{O}(N) ou \mathcal{O}(M)$
+	\item Aplicação do algoritmo. $\mathcal{O}(N^2)$
+	\item Procura do resultado. $\mathcal{O}(N) ou \mathcal{O}(M)$
+	\item Apresentação do resultado. $\mathcal{O}(1)$
+\end{itemize}
+Complexidade global: $\mathcal{O}(N^2)$
+
+
+\section{Avaliação Experimental dos Resultados}
 
 \begin{figure}[H]
 	\centering
-	\begin{tikzpicture}
+	\begin{tikzpicture}[scale=0.9]
 		\begin{axis}[
-			xmin=0, xmax=100000,
+			xmin=0, xmax=100050,
 			ymin=0, ymax=35,
 			xlabel={Tamanho da sequência},
 			ylabel={Tempo(s)},
@@ -69,64 +108,19 @@ Complexidade global: $\mathcal{O}(N^2)$
 			\addplot[blue,mark=square] table{../benchmarks/1.txt};
 		\end{axis}
 	\end{tikzpicture}
-
-\end{figure}
-
-O gráfico está de acordo com a análise teórica prevista.
-
-
-\section{Problema 2}
-\subsection{Descrição do Problema e da Solução}
-
-O problema apresentado tem por objeto determinar o tamanho do maior subsequência
-estritamente crescentes comum a duas sequências de inteiros.
-
-O problema pode ser resolvido recursivamente e apresenta sub-estrutura ótima.
-O tamanho da maior subsequência pode ser definido como
-
-\begin{center}
-	\[
-	L[i][j] = \left\{\begin{array}{lr}
-		0, & \text{se } i = 0\\
-		max(L[i-1][k] + 1 \mid 1 \leq k \leq j \land x_1[i] > x_2[j]), & \text{se } x_1[i] = x_2[j] \text{ e } i > 0\\
-        \end{array}\right\}
-	\]\\[\baselineskip]
-\end{center}
-
-O problema pode ser resolvido recorrendo apenas a uma matrix $1 \times j$, uma
-vez que o valor necessário da linha anterior pode ser representado por um
-inteiro. O resultado ao problema corresponde ao maior valor em $L$.
-
-
-\subsection{Análise Teórica}
-
-\begin{itemize}
-	\item Leitura das dados de entrada. $\mathcal{O}(N)$
-	\item Comparação do tamanho das sequências. $\mathcal{O}(1)$
-	\item Procura do mínimo da sequência. $\mathcal{O}(N)$
-	\item Inicialização do vetor auxiliar. $\mathcal{O}(N)$
-	\item Aplicação do algoritmo. $\mathcal{O}(N^2)$
-	\item Apresentação do resultado. $\mathcal{O}(1)$
-\end{itemize}
-Complexidade global: $\mathcal{O}(N^2)$
-
-\subsection{Avaliação Experimental dos Resultados}
-
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}
+	\qquad
+	\begin{tikzpicture}[scale=0.9]
 		\begin{axis}[name=Tamanho,
-			xmin=0, xmax=100000,
-			ymin=0, ymax=10,
+			xmin=0, xmax=100050,
+			ymin=0, ymax=15,
 			xlabel={Tamanho da sequência},
 			ylabel={Tempo(s)},
 			]
 			\addplot[blue, mark=square] table{../benchmarks/2.txt};
 		\end{axis}
 	\end{tikzpicture}
-
 \end{figure}
 
-O gráfico está de acordo com a análise teórica prevista.
+Os gráficos estão de acordo com a análise teórica realizada.
 
 \end{document}

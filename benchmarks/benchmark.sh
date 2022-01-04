@@ -17,7 +17,7 @@ write_to_file() {
 if [ "$1" == 1 ]; then
 	touch "$OUTPUT_1"
 
-	for size in $(seq 1 5000 100000); do
+	for size in $(seq 1 5000 100001); do
 		sum_times=0
 
 		for round in $(seq 0 4); do
@@ -36,7 +36,7 @@ fi
 if [ "$1" == 2 ]; then
 	touch "$OUTPUT_2"
 
-	for size in $(seq 1 5000 100000); do
+	for size in $(seq 1 5000 100001); do
 		sum_times=0
 
 		for round in $(seq 0 4); do

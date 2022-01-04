@@ -9,6 +9,7 @@ random_k: random_k.cpp
 	$(CC) $(CFLAGS) random_k.cpp -o random_k
 
 run:: random_k
+	rm 1.txt 2.txt
 	bash benchmark.sh 1
 	bash benchmark.sh 2
 
