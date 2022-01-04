@@ -1,4 +1,3 @@
-#include<climits>
 #include<iostream>
 #include<unordered_map>
 #include<vector>
@@ -11,7 +10,6 @@ int longest_increasing_subsequence_lenght(const vector<int> *v, unsigned long lo
 
 	int len_max = 0;
 	int minimum = v->at(0);
-
 	for (size_t i = 0; i < v->size(); i++) {
 		len[i] = 1;
 		occ[i] = 1;
@@ -28,7 +26,7 @@ int longest_increasing_subsequence_lenght(const vector<int> *v, unsigned long lo
 				break;
 			}
 			if (v->at(i) > v->at(j)) {
-				if (len[j] + 1 > len[i]) {
+				if (len[j] + 1 > len[i] ) {
 					len[i] = len[j] + 1;
 					occ[i] = occ[j];
 				} else if (len[j] + 1 == len[i]) {
@@ -44,11 +42,11 @@ int longest_increasing_subsequence_lenght(const vector<int> *v, unsigned long lo
 			*num_occ += occ[i];
 		}
 	}
-
 	return len_max;
 }
-int longest_common_increasing_subsequence_lenght(const vector<int> *v1, const vector<int> *v2, int min2) {
-   	int lcis[2][v2->size()+1];
+
+int longest_common_increasing_subsequence_lenght(const vector<int> *v1, const vector<int> *v2) {
+	int lcis[2][v2->size()+1];
 
 	for (size_t i = 0; i < 2; i++) {
 		lcis[i][0] = 0;
@@ -63,9 +61,6 @@ int longest_common_increasing_subsequence_lenght(const vector<int> *v1, const ve
 		max_length = 0;
 		for (size_t j = 1; j <= v2->size(); j++) {
 			lcis[i % 2][j] = lcis[(i-1) % 2][j];
-			if (v1->at(i-1) < min2) {
-				break;
-			}
 			if (v1->at(i-1) > v2->at(j-1)) {
 				max_length = max(max_length, lcis[(i-1) % 2][j]);
 			} else if (v1->at(i-1) == v2->at(j-1)) {
@@ -128,21 +123,17 @@ void p2() {
 	int number;
 	char c;
 
-	int min1 = INT_MIN;
 	while (scanf("%d%c", &number, &c)) {
 		v1.push_back(number);
 		commons[number] = true;
-		min1 = min(min1, number);
 		if (c == '\n') {
 			break;
 		}
 	}
 
-	int min2 = INT_MIN;
 	while (scanf("%d%c", &number, &c)) {
 		if (commons[number] == true) {
 			v2.push_back(number);
-			min2 = min(min2, number);
 		}
 		if (c == '\n') {
 			break;
@@ -150,9 +141,9 @@ void p2() {
 	}
 
 	if (v1.size() > v2.size()) {
-		cout << longest_common_increasing_subsequence_lenght(&v1, &v2, min2) << endl;
+		cout << longest_common_increasing_subsequence_lenght(&v1, &v2) << endl;
 	} else {
-		cout << longest_common_increasing_subsequence_lenght(&v2, &v1, min1) << endl;
+		cout << longest_common_increasing_subsequence_lenght(&v2, &v1) << endl;
 	}
 }
 
