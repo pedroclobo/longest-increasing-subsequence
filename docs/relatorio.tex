@@ -25,18 +25,25 @@ O 1º problema apresentado tem como objetivo determinar o número de subsequênc
 estritamente crescentes de tamanho máximo de uma sequência de inteiros e indicar
 qual esse tamanho máximo.
 
-Este problema pode ser resolvido recursivamente. $L$ corresponde à função que,
-para um dado índice, devolve o tamanho da maior subsequência estritamente
-crescente até à posição $i$. $O$, de forma semelhante, representa o número de
-ocorrências de subsequências de tamanho máximo até à posição $i$.
+Este problema pode ser resolvido recursivamente, apresentando subestrutura ótima.
+$L$ corresponde à função que, para um dado índice, devolve o tamanho da maior
+subsequência estritamente crescente até à posição $i$. $O$, de forma semelhante,
+representa o número de ocorrências de subsequências de tamanho máximo até à
+posição $i$.
 
 \begin{center}
-	${L[i] = \{1 + max(L[j] \mid 1 \leq j < i \land x_j \leq x_i)}\}$\\
+	\[
+    L[i] = \left\{\begin{array}{lr}
+		1, & \text{se } i = 1\\
+		{1 + max(L[j] \mid 1 \leq j < i \land x_j \leq x_i)}, & \text{se } L[j] + 1 = L[i] \mid 1 \leq j < i \land x_i \geq x_j)\\
+	\end{array}\right\}
+	\]\\[\baselineskip]
+
 	\[
     O[i] = \left\{\begin{array}{lr}
 		O[j], & \text{se } L[j] + 1 > L[i]\\
 		O[i] + O[j], & \text{se } L[j] + 1 = L[i]\\
-        \end{array} \mid 1 \leq j < i \land x_j \leq x_i)\right\}
+        \end{array} \mid 1 \leq j < i \land x_i \geq x_j)\right\}
 	\]\\[\baselineskip]
 
 \end{center}
@@ -49,7 +56,7 @@ número de ocorrências é dado pela soma dos valores de $O$ onde $L$ é máximo
 O 2º problema apresentado tem como objeto determinar o tamanho do maior subsequência
 estritamente crescentes comum a duas sequências de inteiros.
 
-Este problema pode ser resolvido recursivamente e apresenta subestrutura ótima.
+Este problema pode ser resolvido recursivamente, apresentando subestrutura ótima.
 O tamanho da maior subsequência pode ser definido como
 
 \begin{center}
@@ -96,7 +103,7 @@ Complexidade global: $\mathcal{O}(NM)$
 
 \section{Avaliação Experimental dos Resultados}
 
-Foi geradas sequências aleatórias de tamanho 1 a 100001 em incrementos de 1000.
+Foram geradas sequências aleatórias de tamanho 1 a 100001 em incrementos de 1000.
 Abaixo estão os gráficos do problema 1 e 2, respetivamente.
 
 \begin{figure}[H]
@@ -125,5 +132,14 @@ Abaixo estão os gráficos do problema 1 e 2, respetivamente.
 \end{figure}
 
 Os gráficos estão de acordo com a análise teórica realizada.
+
+
+\section{Bibliografia}
+
+\begin{itemize}
+	\item Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein (2009)
+	\emph{Introduction to Algorithms, Third Edition}, The MIT Press.
+	\item \emph{https://wcipeg.com/wiki/Longest\_increasing\_subsequence}
+\end{itemize}
 
 \end{document}

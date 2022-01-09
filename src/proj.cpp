@@ -42,39 +42,41 @@ int longest_increasing_subsequence_lenght(const vector<int> *v, unsigned long lo
 			*num_occ += occ[i];
 		}
 	}
+
 	return len_max;
 }
 
 int longest_common_increasing_subsequence_lenght(const vector<int> *v1, const vector<int> *v2) {
-	int lcis[2][v2->size()+1];
+	int len[2][v2->size()+1];
 
 	for (size_t i = 0; i < 2; i++) {
-		lcis[i][0] = 0;
+		len[i][0] = 0;
 	}
 
 	for (size_t j = 0; j <= v2->size(); j++) {
-		lcis[0][j] = 0;
+		len[0][j] = 0;
 	}
 
-	int max_length;
+	int local_length;
+
 	for (size_t i = 1; i <= v1->size(); i++) {
-		max_length = 0;
+		local_length = 0;
 		for (size_t j = 1; j <= v2->size(); j++) {
-			lcis[i % 2][j] = lcis[(i-1) % 2][j];
+			len[i % 2][j] = len[(i-1) % 2][j];
 			if (v1->at(i-1) > v2->at(j-1)) {
-				max_length = max(max_length, lcis[(i-1) % 2][j]);
+				local_length = max(local_length, len[(i-1) % 2][j]);
 			} else if (v1->at(i-1) == v2->at(j-1)) {
-				lcis[i % 2][j] = 1 + max_length;
+				len[i % 2][j] = 1 + local_length;
 			}
 		}
 	}
 
-	int result = 0;
+	int len_max = 0;
 	for (size_t j = 0; j <= v2->size(); j++) {
-		result = max(result, lcis[v1->size() % 2][j]);
+		len_max = max(len_max, len[v1->size() % 2][j]);
 	}
 
-	return result;
+	return len_max;
 }
 
 void p1() {
@@ -117,7 +119,7 @@ void p1() {
 }
 
 void p2() {
-	vector<int> v1, v2, coms;
+	vector<int> v1, v2;
 	unordered_map<int, bool> commons;
 
 	int number;
