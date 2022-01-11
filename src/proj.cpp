@@ -4,49 +4,46 @@
 
 using namespace std;
 
-int longest_increasing_subsequence_lenght(const vector<int> *v, unsigned long long *num_occ) {
-	int len[v->size()];
-	int occ[v->size()];
+void longest_increasing_subsequence_lenght(vector<int> *v) {
+	size_t size = v->size();
 
+	int len[size], occ[size];
 	int len_max = 0;
-	int minimum = v->at(0);
-	for (size_t i = 0; i < v->size(); i++) {
-		len[i] = 1;
-		occ[i] = 1;
+	unsigned long long occ_max = 0;
 
-		minimum = min(v->at(i), minimum);
+	int len_i;
+	int occ_i;
+
+	for (size_t i = 0; i < size; i++) {
+		len_i = 1;
+		occ_i = 1;
 
 		for (size_t j = 0; j < i; j++) {
-			if (v->at(i) == minimum) {
-				break;
-			}
-			if (i != 0 && v->at(i) == v->at(i-1)) {
-				len[i] = len[i-1];
-				occ[i] = occ[i-1];
-				break;
-			}
-			if (v->at(i) > v->at(j)) {
-				if (len[j] + 1 > len[i] ) {
-					len[i] = len[j] + 1;
-					occ[i] = occ[j];
-				} else if (len[j] + 1 == len[i]) {
-					occ[i] += occ[j];
+			if ((*v)[i] > (*v)[j]) {
+				if (len[j] + 1 > len_i ) {
+					len_i = len[j] + 1;
+					occ_i = occ[j];
+				} else if (len[j] + 1 == len_i) {
+					occ_i += occ[j];
 				}
 			}
 		}
 
-		if (len[i] > len_max) {
-			len_max = len[i];
-			*num_occ = occ[i];
-		} else if (len[i] == len_max) {
-			*num_occ += occ[i];
+		if (len_i > len_max) {
+			len_max = len_i;
+			occ_max = occ_i;
+		} else if (len_i == len_max) {
+			occ_max += occ_i;
 		}
+
+		len[i] = len_i;
+		occ[i] = occ_i;
 	}
 
-	return len_max;
+	cout << len_max << " " << occ_max << endl;
 }
 
-int longest_common_increasing_subsequence_lenght(const vector<int> *v1, const vector<int> *v2) {
+void longest_common_increasing_subsequence_lenght(const vector<int> *v1, const vector<int> *v2) {
 	int len[2][v2->size()+1];
 
 	for (size_t i = 0; i < 2; i++) {
@@ -76,7 +73,7 @@ int longest_common_increasing_subsequence_lenght(const vector<int> *v1, const ve
 		len_max = max(len_max, len[v1->size() % 2][j]);
 	}
 
-	return len_max;
+	cout << len_max << endl;
 }
 
 void p1() {
@@ -84,38 +81,15 @@ void p1() {
 
 	int number;
 	char c;
-	size_t inc = 0;
-	size_t dec = 0;
-	size_t eq = 0;
 
 	while (scanf("%d%c", &number, &c)) {
-		if (!v.empty()) {
-			if (number > v.back()) {
-				inc++;
-			} else if (number < v.back()) {
-				dec++;
-			} else if (number == v.back()) {
-				eq++;
-			}
-		}
 		v.push_back(number);
 		if (c == '\n') {
 			break;
 		}
 	}
 
-	if (inc == v.size() - 1) {
-		cout << v.size() << " " << 1 << endl;
-		return;
-	} else if (dec == v.size() - 1 - eq) {
-		cout << 1 << " " << v.size() << endl;
-		return;
-	}
-
-	unsigned long long occ;
-	int len = longest_increasing_subsequence_lenght(&v, &occ);
-
-	cout << len << " " << occ << endl;
+	longest_increasing_subsequence_lenght(&v);
 }
 
 void p2() {
@@ -143,14 +117,16 @@ void p2() {
 	}
 
 	if (v1.size() > v2.size()) {
-		cout << longest_common_increasing_subsequence_lenght(&v1, &v2) << endl;
+		longest_common_increasing_subsequence_lenght(&v1, &v2);
+		return;
 	} else {
-		cout << longest_common_increasing_subsequence_lenght(&v2, &v1) << endl;
+		longest_common_increasing_subsequence_lenght(&v2, &v1);
+		return;
 	}
 }
 
 int main() {
-	short flag;
+	int flag;
 	cin >> flag;
 
 	if (flag == 1) {
